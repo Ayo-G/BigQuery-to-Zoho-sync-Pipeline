@@ -55,7 +55,7 @@ def run():
     return access_token
 
     
-  # ========== 📊 QUERY BIGQUERY ==========
+  # ========== QUERY BIGQUERY ==========
   def query_bigquery():
       try:
           creds = service_account.Credentials.from_service_account_file(GCP_CREDENTIALS_PATH)
@@ -69,14 +69,14 @@ def run():
                   """
 
           df = client.query(query).to_dataframe()
-          print("✅ Query successful")
+          print("Query successful")
           return df
 
       except Exception as e:
-          print("❌ Error querying BigQuery:", e)
+          print("Error querying BigQuery:", e)
           return None
 
-  # ========== 🧹 CLEAR ENTIRE SHEET (EXCLUDING HEADER) ==========
+  # ========== CLEAR ENTIRE SHEET (EXCLUDING HEADER) ==========
   def clear_sheet(access_token: str, spreadsheet_id: str, worksheet_name: str, first_col: str):
       """
       Deletes all rows where <first_col> is NOT null, preserving the header row.
@@ -100,23 +100,23 @@ def run():
       response = requests.post(url=url, headers=headers, data=paramMap)
 
       if response.status_code == 200:
-          print(f"✅ Cleared all rows from {worksheet_name} where {first_col} != null")
+          print(f"Cleared all rows from {worksheet_name} where {first_col} != null")
       else:
-          print("❌ Failed to clear sheet.")
+          print("Failed to clear sheet.")
           print(f"Status Code: {response.status_code}")
           print(f"Response: {response.text}")
 
 
 
-  # ========== 📥 WRITE DATA TO SHEET ==========
+  # ========== WRITE DATA TO SHEET ==========
   def write_to_sheet(df, access_token, spreadsheet_id, worksheet_name, batch_size=1000):
       if df is None or df.empty:
-          print("⚠️ No data to write.")
+          print("No data to write.")
           return
 
       try:
           total_rows = len(df)
-          print(f"📊 Preparing to upload {total_rows} rows in batches of {batch_size} to {worksheet_name}...")
+          print(f"Preparing to upload {total_rows} rows in batches of {batch_size} to {worksheet_name}...")
           headers_row = df.columns.tolist()
           url = f"https://sheet.zoho.com/api/v2/{spreadsheet_id}"
           headers = {
@@ -137,33 +137,33 @@ def run():
                   "json_data": json.dumps(records)
               }
 
-              print(f"📤 Uploading rows {start + 1} to {end}...")
+              print(f"Uploading rows {start + 1} to {end}...")
               response = requests.post(url=url, headers=headers, data=paramMap)
 
               if response.status_code == 200:
-                  print(f"✅ Successfully uploaded rows {start + 1} to {end}")
+                  print(f"Successfully uploaded rows {start + 1} to {end}")
               else:
-                  print(f"❌ Failed to upload rows {start + 1} to {end} (Status {response.status_code})")
+                  print(f"Failed to upload rows {start + 1} to {end} (Status {response.status_code})")
                   print("Response:", response.text)
-                  print("🚨 Stopping further uploads.")
+                  print("Stopping further uploads.")
                   break  # Stop on error
 
               time.sleep(1)  # Short delay between batches
 
       except Exception as e:
-          print("❌ Error in write_to_sheet:", e)
+          print("Error in write_to_sheet:", e)
 
-  # ========== 🚀 MAIN RUN ==========
+  # ========== MAIN RUN ==========
   df = query_bigquery()
   if df is not None:
-      print(f"📊 Retrieved {len(df)} rows from BigQuery")
+      print(f"Retrieved {len(df)} rows from BigQuery")
       token = get_access_token()
 
       first_column = df.columns.tolist()[0]
       clear_sheet(token, SPREADSHEET_ID, WORKSHEET_NAME, first_column)
 
       delay_seconds = 2
-      print(f"⏳ Waiting {delay_seconds} seconds before writing data...")
+      print(f"Waiting {delay_seconds} seconds before writing data...")
       time.sleep(delay_seconds)
 
       write_to_sheet(df, token, SPREADSHEET_ID, WORKSHEET_NAME)
