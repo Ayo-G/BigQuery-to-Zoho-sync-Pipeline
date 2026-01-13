@@ -3,7 +3,7 @@
 
 ## Overview
 
-This project is a serverless data pipeline that synchronizes query results from **BigQuery** into **Zoho Sheets** on a scheduled basis.
+This project is a serverless data pipeline that synchronises query results from **BigQuery** into **Zoho Sheets** on a scheduled basis.
 
 It was built to support a company-wide migration away from Google Workspace, where multiple operational dashboards depended on Google Sheets as their final reporting layer. The pipeline preserves near–real-time access to dashboards while removing the need for manual exports or uploads.
 
@@ -15,7 +15,7 @@ The system is designed for reliability, simplicity, and fast iteration in a prod
 After migrating from Google Workspace to Zoho Workspace:
 
 - Existing Google Sheets–based dashboards could no longer refresh automatically
-- Teams resorted to manually exporting data from BigQuery and uploading to Zoho Sheets
+- Teams resorted to manually exporting data from BigQuery and uploading it to Zoho Sheets
 - Reporting became inconsistent, error-prone, and time-consuming
 - Available third-party connectors did not meet scheduling or reliability requirements
 
@@ -122,13 +122,13 @@ See inline code comments for environment-specific setup.
 - Large datasets may approach Zoho API limits
 - Monitoring is log-based rather than dashboard-driven
 
-These were acceptable tradeoffs given the migration timeline and operational priorities.
+These were acceptable trade-offs given the migration timeline and operational priorities.
 
 
 ## Related Links
 
 - **Portfolio Case Study**: https://rebrand.ly/ayo-g  
-- **Technical Deep-Dive Article**: https://ayo-g.medium.com/bigquery-to-zoho-sheet-sync-pipeline-1782cd3208b3  
+- **Technical Deep-Dive Article**: [Medium Article](https://ayo-g.medium.com/bigquery-to-zoho-sheet-sync-pipeline-1782cd3208b3)  
 
 
 ## Author
